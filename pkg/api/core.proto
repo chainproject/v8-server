@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package api;
+
+option go_package = "api";
+
+import "google/protobuf/timestamp.proto";
+
+message UploadRequest {
+    string name = 1;
+    string script = 2;
+}
+
+message UploadResponse {
+    string id = 1;
+    google.protobuf.Timestamp created_at = 2;
+}
+
+message RunRequest {
+    string id = 1;
+    string name = 2;
+    map<string,string> env = 3;
+}
+
+message RunResponse {
+    string output = 1;
+}
+
+message ListRequest {}
+
+message ListResponse {
+    string id = 1;
+    string name = 2;
+    google.protobuf.Timestamp created_at = 3;
+    uint64 size = 4;
+}
+
+message DeleteRequest {
+    string id = 1;
+    string name = 2;
+}
+
+message DeleteResponse {}
+
+service V8 {
+    rpc Upload(UploadRequest) returns (UploadResponse);
+    rpc Run(RunRequest) returns (RunResponse);
+    rpc List(ListRequest) returns (stream ListResponse);
+    rpc Delete(DeleteRequest) returns (DeleteResponse);
+}
